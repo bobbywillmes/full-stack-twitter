@@ -11,10 +11,12 @@ class TweetsController < ApplicationController
     session = Session.find_by(token: token)
     user = session.user
     @tweet = user.tweets.new(tweet_params)
+    @tweets = user.tweets
 
     if @tweet.save
       render json: {
-        tweet: @tweet
+        tweet: @tweet,
+        tweets: @tweets
       }
     end
   end
@@ -31,6 +33,11 @@ class TweetsController < ApplicationController
     if tweet and tweet.user == user and tweet.destroy
       render json: {
         success: true
+      }
+    elsif !(tweet.user == user)
+      render json: {
+        success: false,
+        error: 'Can\'t delete someone else\'s tweet.'
       }
     else
       render json: {

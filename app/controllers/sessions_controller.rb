@@ -1,5 +1,7 @@
 class SessionsController < ApplicationController
   def create
+    puts 'Session create -----'
+    puts params
     @user = User.find_by(username: params[:user][:username])
   
     if @user and BCrypt::Password.new(@user.password_digest) == params[:user][:password]

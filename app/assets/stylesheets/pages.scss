@@ -5,3 +5,42 @@ body {
   background: #cfc;
   text-align: center;
 }
+
+nav {
+  a {
+    padding: 10px
+  }
+}
+
+.d-none {
+  display: none;
+}
+
+#logIn fieldset:disabled,
+#logOut fieldset:disabled {
+  color: #ccc;
+}
+
+#loginAlert {
+  position: absolute;
+  top: 30px;
+}
+
+#signUpErrors, #logInErrors {
+  margin-top: 20px;
+  div {
+    display: inline-block;
+  }
+}
+
+#tweets {
+  width: 50%;
+  article {
+    border: 1px solid black;
+    padding: 1em;
+    margin: 1em;
+    .delete {
+      float: right;
+    }
+  }
+}
