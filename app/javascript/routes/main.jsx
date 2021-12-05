@@ -1,29 +1,6 @@
 import * as React from 'react'
 import axios from 'axios'
-import Header from '../components/header'
-
-function HandleErrors(err, formType) {
-  // loop through given errors to build HTML, insert errors onto page section based on formType
-  console.log(`handleErrors() ${formType} ---`)
-  console.log(err)
-  let errorHtml = ''
-  for (const property in err) {
-    // console.log(`${property}`)
-    errorHtml += `
-      <div class="alert alert-warning" role="alert">
-        <strong>${property}</strong>: ${err[property].join(', ')}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    `
-  }
-  let errorDiv
-  if (formType == 'signUp') {
-    errorDiv = document.querySelector('#signUpErrors')
-  } else if (formType == 'logIn') {
-    errorDiv = document.querySelector('#logInErrors')
-  }
-  errorDiv.innerHTML = errorHtml
-}
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 class Guest extends React.Component {
   // login & sign up page, all actions (handleChange & handleSubmit) are passed up to the Main component
@@ -91,26 +68,35 @@ class Guest extends React.Component {
   }
 }
 
+function FormatDate(date) {
+  let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  let newDate = new Date(date)
+  newDate = months[newDate.getMonth()] + ' ' + newDate.getDate() + ', ' + newDate.getFullYear() + ' ' + newDate.toLocaleTimeString()
+  return newDate
+}
+
 const Tweets = (props) => {
   // render all tweets for the User component
   let users = props.users
+  // console.log(`Tweets() build Tweets ------------------`)
   return (
     <div id="tweets">
       <h3>Tweets</h3>
-      {/* map through tweets, get the author's details; if user is the author, add a delete button */}
+      {/* map through tweets; if user is the author, add a delete button */}
       {props.tweets.map(tweet => {
-        let author = users.filter(function (user) {
-          return user.id === tweet.user_id
-        })
-        author = author[0]
         let del = ''
         if (tweet.user_id === props.user_id) {
-          del = <a name="deleteTweet" className="delete" onClick={props.handleDelete}>x</a>
+          del = (
+            <span name="deleteTweet" className="delete" onClick={props.handleDelete}>
+                <FontAwesomeIcon icon={['fas', 'trash']}></FontAwesomeIcon>
+            </span>
+          )
         }
         return (
           <article id={tweet.id} key={tweet.id}>
             {tweet.message} <br />
-            by {author.username} on {tweet.created_at}
+            by {tweet.user_id} <br />
+            on {FormatDate(tweet.created_at)}
             {del}
           </article>
         )
@@ -135,12 +121,9 @@ const TweetForm = (props) => {
 }
 
 class User extends React.Component {
-  // main component after user has logged in, shows feed & Tweet form, all actions (handleChange & handleSubmit) are passed up to the Main component
+  // main component after user has logged in, shows feed & Tweet form, all actions (handleChange & handleSubmit) are passed up to App through props
   constructor(props) {
     super(props)
-    this.state = {
-      tweets: []
-    }
   }
 
   handleChange = (event) => {
@@ -160,11 +143,6 @@ class User extends React.Component {
           <div className="col">
             <h3>Welcome {this.props.user} ({this.props.user_id})</h3>
           </div>
-          <div className="col">
-            <form id="logOut" name="logOut" onSubmit={this.handleSubmit}>
-              <button name="logOut" className="btn btn-secondary">Log Out</button>
-            </form>
-          </div>
         </div>
         <br />
         <div className="row">
@@ -181,215 +159,40 @@ class User extends React.Component {
 }
 
 class Main extends React.Component {
-  // main component, maintains State for application, handles API calls to server, renders either User or Guest component based on login state
+  // if user is logged in render the User component (feed), else render the Guest component (login & signup). handleChange & handleSubmit are passed up to App.js.
   constructor(props) {
     super(props);
-    this.state = {
-      username: '',
-      user_id: '',
-      password: '',
-      authenticated: false,
-      newUsername: '',
-      newEmail: '',
-      newPassword: '',
-      tweets: []
-    }
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
-  }
-
-  getUsers() {
-    axios.get('/api/users')
-      .then(res => {
-        if (res.status === 200) {
-          // console.log(`${res.status}(${res.statusText}) | got users`)
-          // console.log(res.data)
-          let users = res.data
-          this.setState({ users: users })
-        } else {
-          console.log(`couldn't get users`)
-          console.log(error)
-        }
-      })
-      .catch(err => {
-        console.log(`error with GET: /api/users`)
-        console.log(err)
-      })
-  }
-
-  getTweets() {
-    axios.get('/api/tweets',)
-      .then(res => {
-        if (res.status === 200) {
-          // console.log(`successfully got tweets`)
-          // console.log(res.data)
-          this.setState({ tweets: res.data.tweets })
-        } else {
-          console.log(`couldn't get tweets`)
-        }
-      })
-      .catch(err => {
-        console.log(`error with GET: /api/tweets`)
-        console.log(err)
-      })
-  }
-
-  componentDidMount() {
-    this.getUsers()
-  }
-
-  handleSubmit = (event) => {
-    // all the api calls to the backend
-    event.preventDefault()
-    console.log(event)
-    let formType = event.target.name
-    console.log(`form type: ${formType}`)
-
-    if (formType === 'logIn') {
-      // try to login with form input set by user; if success, user is authenticated
-      axios.post('/api/sessions', {
-        user: {
-          username: this.state.username,
-          password: this.state.password
-        }
-      })
-        .then(res => {
-          // console.log(`POST: /api/sessions --`)
-          // console.log(`${res.status}(${res.statusText}) | ${res.data.success}`)
-          if (res.data.success === true) {
-            // console.log(`successfully logged in`)
-            this.setState({ user_id: res.data.session.user_id })
-            this.setState({ authenticated: true, newPassword: "", newUsername: "" })
-            this.getTweets()
-          } else {
-            HandleErrors({ error: ['Incorrect username and/or password'] }, formType)
-          }
-        })
-        .catch(err => {
-          console.log(`error with POST: /api/sessions`)
-          console.log(err)
-        })
-    } else if (formType === 'logOut') {
-      // log out by sending a delete request to end session
-      axios.delete('/api/sessions')
-        .then(res => {
-          // console.log(`DELETE: /api/sessions --`)
-          // console.log(`${res.status}(${res.statusText}) | ${res.data.success}`)
-          if (res.data.success === true) {
-            // console.log(`successfully logged out`)
-            this.setState({ authenticated: false, username: '', password: '' })
-          }
-        })
-        .catch(err => {
-          console.log(`error with DELETE: /api/sessions`)
-          console.log(err)
-        })
-    } else if (formType === 'signUp') {
-      // submit form input set by user to sign up, else return error
-      console.log('signUp handleSubmit() ---')
-      axios.post('/api/users', {
-        user: {
-          email: this.state.newEmail,
-          username: this.state.newUsername,
-          password: this.state.newPassword
-        }
-      })
-        .then(res => {
-          console.log(`POST: /api/users ---`)
-          console.log(res)
-          let error = res.data.error
-          HandleErrors(error, formType)
-        })
-    } else if (formType === 'tweet') {
-      // submit a tweet, else return error
-      console.log(`formType === 'tweet`)
-      console.log(`form === tweet ----`)
-      axios.post('/api/tweets', {
-        tweet: {
-          message: this.state.newTweet
-        }
-      })
-        .then(res => {
-          console.log(`POST: /api/tweets --`)
-          console.log(res)
-          let tweet = res.data.tweet
-          console.log(tweet)
-          console.log(this.state)
-
-          this.getTweets()
-        })
-        .catch(err => {
-          console.log(`error with POST: /api/tweets`)
-          console.log(err)
-        })
-    } else if (formType === 'deleteTweet') {
-      // delete a tweet
-      console.log(`formType === 'deleteTweet'`)
-      console.log(`handleDelete() ---`)
-      let tweetEl = event.target.parentElement
-      let tweetId = tweetEl.getAttribute('id')
-      console.log(tweetEl)
-      console.log(tweetId)
-      axios.delete(`/api/tweets/${tweetId}`)
-        .then(res => {
-          console.log(`DEL: /api/tweets/${tweetId} ---`)
-          console.log(res)
-          if (res.data.success) {
-            console.log(`delete tweet was successful ---`)
-            this.getTweets()
-          }
-        })
-    } else {
-      console.log(`handleSubmit() else ---- `)
-    }
   }
 
   handleChange = (event) => {
-    // watch for changes on logIn, signUp & tweet forms, then setState of the form input values
-    // console.log(event.target.name + ': ' + event.target.value)
-    let form = event.target.parentElement.parentElement.parentElement.getAttribute('name')
-    // console.log(form)
-    if (form === 'logIn') {
-      // console.log(`logIn form ---`)
-      if (event.target.name === 'username') {
-        this.setState({ username: event.target.value })
-      } else if (event.target.name === 'password') {
-        this.setState({ password: event.target.value })
-      }
-    } else if (form === 'signUp') {
-      // console.log(`signUp form ---`)
-      if (event.target.name === 'username') {
-        this.setState({ newUsername: event.target.value })
-      } else if (event.target.name === 'email') {
-        this.setState({ newEmail: event.target.value })
-      } else if (event.target.name === 'password') {
-        this.setState({ newPassword: event.target.value })
-      }
-    } else if (form === 'tweet') {
-      // console.log(`tweet form ---- ${event.target.value}`)
-      this.setState({ newTweet: event.target.value })
-    }
+    this.props.handleChange(event)
   }
 
+  handleSubmit = (event) => {
+    this.props.handleSubmit(event)
+  }
+
+
   isAuthenticated() {
-    return !!this.state.authenticated
+    return !!this.props.authenticated
   }
 
   render() {
     return (
       <main style={{ padding: "1rem 0" }}>
-        <Header />
         {this.isAuthenticated()
           ? <User
-            user={this.state.username}
-            user_id={this.state.user_id}
-            users={this.state.users}
-            tweets={this.state.tweets}
+            user={this.props.username}
+            user_id={this.props.user_id}
+            users={this.props.users}
+            tweets={this.props.tweets}
             handleSubmit={this.handleSubmit}
-            handleChange={this.handleChange} />
+            handleChange={this.handleChange}
+            />
           : <Guest
             handleSubmit={this.handleSubmit}
-            handleChange={this.handleChange} />
+            handleChange={this.handleChange}
+            />
         }
       </main>
     );
