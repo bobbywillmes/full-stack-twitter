@@ -12,7 +12,7 @@ import Header from './components/header'
 import HandleErrors from './utils/handleErrors'
 
 class App extends React.Component {
-  // top level component for application, maintains the State, passes down handleChange (form changes), handleSubmit(api calls) & state data (tweets & users) to Main component
+  // top level component for application, maintains the State, passes down handleChange (form changes), handleSubmit (api calls) & state data (tweets & users) to Main component
   constructor(props) {
     super(props)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -36,7 +36,7 @@ class App extends React.Component {
     axios.get('/api/tweets')
       .then(res => {
         if (res.status === 200) {
-          this.setState({ tweets: res.data.tweets })
+          this.setState({ tweets: res.data })
         } else {
           console.log(`couldn't get tweets`)
         }
@@ -71,7 +71,7 @@ class App extends React.Component {
     console.log(`form type: ${formType}`)
 
     if(event.target.parentElement.parentElement.getAttribute('name') == 'deleteTweet') {
-      console.log(`tweet should be deleted---`)
+      // console.log(`tweet should be deleted---`)
       formType = 'deleteTweet'
     }
 
@@ -90,10 +90,11 @@ class App extends React.Component {
             this.setState({
               user_id: res.data.session.user_id,
               user: res.data.user,
+              username: '',
               password: '',
               authenticated: true,
-              newPassword: "",
-              newUsername: ""
+              newPassword: '',
+              newUsername: ''
             })
             this.getTweets()
             this.getUsers()
@@ -146,6 +147,7 @@ class App extends React.Component {
           // clear tweet form, then get tweets
           const tweetForm = document.querySelector('textarea#tweet')
           tweetForm.value = ''
+          this.setState({ newTweet: '' })
           this.getTweets()
         })
         .catch(err => {

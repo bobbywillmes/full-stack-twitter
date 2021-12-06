@@ -1,6 +1,6 @@
 import * as React from 'react'
-import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import FormatDate from '../utils/formatdate'
 
 class Guest extends React.Component {
   // login & sign up page, all actions (handleChange & handleSubmit) are passed up to the Main component
@@ -68,17 +68,8 @@ class Guest extends React.Component {
   }
 }
 
-function FormatDate(date) {
-  let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-  let newDate = new Date(date)
-  newDate = months[newDate.getMonth()] + ' ' + newDate.getDate() + ', ' + newDate.getFullYear() + ' ' + newDate.toLocaleTimeString()
-  return newDate
-}
-
 const Tweets = (props) => {
   // render all tweets for the User component
-  let users = props.users
-  // console.log(`Tweets() build Tweets ------------------`)
   return (
     <div id="tweets">
       <h3>Tweets</h3>
@@ -95,7 +86,7 @@ const Tweets = (props) => {
         return (
           <article id={tweet.id} key={tweet.id}>
             {tweet.message} <br />
-            by {tweet.user_id} <br />
+            by {tweet.username}  ({tweet.user_id}) <br />
             on {FormatDate(tweet.created_at)}
             {del}
           </article>
@@ -121,7 +112,7 @@ const TweetForm = (props) => {
 }
 
 class User extends React.Component {
-  // main component after user has logged in, shows feed & Tweet form, all actions (handleChange & handleSubmit) are passed up to App through props
+  // main component after user has logged in, shows feed & Tweet form, all actions (handleChange, handleSubmit & handleDelete) are passed up to App through props
   constructor(props) {
     super(props)
   }
@@ -141,7 +132,7 @@ class User extends React.Component {
       <div className="container">
         <div className="row">
           <div className="col">
-            <h3>Welcome {this.props.user} ({this.props.user_id})</h3>
+            <h3>Welcome {this.props.user.username} ({this.props.user_id})</h3>
           </div>
         </div>
         <br />
@@ -152,7 +143,7 @@ class User extends React.Component {
         </div>
         <hr />
         <h4>Feed</h4>
-        <Tweets tweets={this.props.tweets} handleDelete={this.handleDelete} user_id={this.props.user_id} users={this.props.users} />
+        <Tweets tweets={this.props.tweets} handleDelete={this.handleDelete} user_id={this.props.user_id} />
       </div>
     )
   }
@@ -182,7 +173,7 @@ class Main extends React.Component {
       <main style={{ padding: "1rem 0" }}>
         {this.isAuthenticated()
           ? <User
-            user={this.props.username}
+            user={this.props.user}
             user_id={this.props.user_id}
             users={this.props.users}
             tweets={this.props.tweets}

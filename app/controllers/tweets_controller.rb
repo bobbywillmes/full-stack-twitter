@@ -1,9 +1,7 @@
 class TweetsController < ApplicationController
   def index
     @tweets = Tweet.all.order(created_at: :desc)
-    render json: {
-      tweets: @tweets
-    }
+    render 'api/tweets/index'
   end
 
   def create
