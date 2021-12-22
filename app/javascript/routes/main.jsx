@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import FormatDate from '../utils/formatdate'
+import Header from '../components/header'
 
 class Guest extends React.Component {
   // login & sign up page, all actions (handleChange & handleSubmit) are passed up to the Main component
@@ -80,7 +81,7 @@ const Tweets = (props) => {
         if (tweet.user_id === props.user_id) {
           del = (
             <span name="deleteTweet" className="delete" onClick={props.handleDelete}>
-                <FontAwesomeIcon icon={['fas', 'trash']}></FontAwesomeIcon>
+              <FontAwesomeIcon icon={['fas', 'trash']}></FontAwesomeIcon>
             </span>
           )
         }
@@ -131,6 +132,7 @@ class User extends React.Component {
   render() {
     return (
       <div className="container">
+      <Header authenticated={this.props.authenticated} handleSubmit={this.handleSubmit} />
         <div className="row">
           <div className="col">
             <h3>Welcome {this.props.user.username}</h3>
@@ -171,20 +173,21 @@ class Main extends React.Component {
 
   render() {
     return (
-      <main style={{ padding: "1rem 0" }}>
+      <main>
         {this.isAuthenticated()
           ? <User
             user={this.props.user}
             user_id={this.props.user_id}
             users={this.props.users}
             tweets={this.props.tweets}
+            authenticated={this.props.authenticated}
             handleSubmit={this.handleSubmit}
             handleChange={this.handleChange}
-            />
+          />
           : <Guest
             handleSubmit={this.handleSubmit}
             handleChange={this.handleChange}
-            />
+          />
         }
       </main>
     );

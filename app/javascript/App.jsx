@@ -225,7 +225,6 @@ class App extends React.Component {
   render() {
     return (
       <Router>
-        <Header authenticated={this.state.authenticated} handleSubmit={this.handleSubmit}></Header>
         <Routes>
           <Route exact path='/' element={<Main
             handleChange={this.handleChange}
@@ -242,6 +241,7 @@ class App extends React.Component {
             setProfileUser={this.setProfileUser.bind(this)}
             user={this.state.user}
             handleSubmit={this.handleSubmit}
+            authenticated={this.state.authenticated}
           />}></Route>
         </Routes>
       </Router>
