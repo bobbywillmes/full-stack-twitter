@@ -8,6 +8,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 library.add(fas, fab)
 import Main from './routes/main'
+import Profile from './routes/profile'
 import Header from './components/header'
 import HandleErrors from './utils/handleErrors'
 
@@ -28,7 +29,9 @@ class App extends React.Component {
       newPassword: '',
       newTweet: '',
       tweets: [],
-      users: []
+      users: [],
+      userTweets: [],
+      userProfile: undefined
     }
   }
 
@@ -63,6 +66,29 @@ class App extends React.Component {
       })
   }
 
+  getUserTweets(username) {
+    console.log(`getUserTweets(${username})   app.js`)
+    axios.get('/api/users/' + username + '/tweets')
+      .then(res => {
+        if (res.status === 200) {
+          // console.log(res.data.tweets)
+          this.setState({ userTweets: res.data.tweets })
+        } else {
+          console.log(`couldn't get tweets`)
+        }
+      })
+      .catch(err => {
+        console.log(`error with GET: /api/tweets`)
+        console.log(err)
+      })
+  }
+
+  setProfileUser(user) {
+    // console.log(`setProfileUser(${user})`)
+    this.setState({ userProfile: user })
+    this.getUserTweets(user)
+  }
+
   handleSubmit = (event) => {
     // api calls to the backend
     event.preventDefault()
@@ -70,7 +96,7 @@ class App extends React.Component {
     let formType = event.target.name
     console.log(`form type: ${formType}`)
 
-    if(event.target.parentElement.parentElement.getAttribute('name') == 'deleteTweet') {
+    if (event.target.parentElement.parentElement.getAttribute('name') == 'deleteTweet') {
       // console.log(`tweet should be deleted---`)
       formType = 'deleteTweet'
     }
@@ -210,6 +236,13 @@ class App extends React.Component {
             users={this.state.users}
             tweets={this.state.tweets}
           />}  ></Route>
+          <Route exact path="/:username" element={<Profile
+            getUserTweets={this.getUserTweets}
+            userTweets={this.state.userTweets}
+            setProfileUser={this.setProfileUser.bind(this)}
+            user={this.state.user}
+            handleSubmit={this.handleSubmit}
+          />}></Route>
         </Routes>
       </Router>
 

@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import FormatDate from '../utils/formatdate'
 
@@ -86,7 +87,7 @@ const Tweets = (props) => {
         return (
           <article id={tweet.id} key={tweet.id}>
             {tweet.message} <br />
-            by {tweet.username}  ({tweet.user_id}) <br />
+            by <Link to={`/${tweet.username}`}>{tweet.username}</Link> <br />
             on {FormatDate(tweet.created_at)}
             {del}
           </article>
@@ -132,7 +133,7 @@ class User extends React.Component {
       <div className="container">
         <div className="row">
           <div className="col">
-            <h3>Welcome {this.props.user.username} ({this.props.user_id})</h3>
+            <h3>Welcome {this.props.user.username}</h3>
           </div>
         </div>
         <br />
