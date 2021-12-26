@@ -89,12 +89,45 @@ class App extends React.Component {
     this.getUserTweets(user)
   }
 
+  checkAuthenticated() {
+    // console.log(`checkAuthenticated() -----`)
+    axios.get('/api/authenticated')
+      .then(res => {
+        // console.log(res.data)
+        if (res.data.success) {
+          // console.log(`user is logged in`)
+          this.setState({
+            authenticated: true,
+            user: res.data.user
+          })
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
+  logout() {
+    // console.log(`logout()   App.js ---`)
+    axios.delete('/api/sessions')
+      .then(res => {
+        // console.log(res.data)
+        this.setState({
+          authenticated: false,
+          user: undefined
+        })
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
   handleSubmit = (event) => {
     // api calls to the backend
     event.preventDefault()
-    console.log(event)
+    // console.log(event)
     let formType = event.target.name
-    console.log(`form type: ${formType}`)
+    // console.log(`form type: ${formType}`)
 
     if (event.target.parentElement.parentElement.getAttribute('name') == 'deleteTweet') {
       // console.log(`tweet should be deleted---`)
@@ -133,6 +166,7 @@ class App extends React.Component {
           console.log(err)
         })
     } else if (formType === 'logOut') {
+      // console.log(`formType === 'logOut'`)
       // log out by sending a delete request to end session
       axios.delete('/api/sessions')
         .then(res => {
@@ -230,6 +264,9 @@ class App extends React.Component {
             handleChange={this.handleChange}
             handleSubmit={this.handleSubmit}
             authenticated={this.state.authenticated}
+            checkAuthenticated={this.checkAuthenticated.bind(this)}
+            logout={this.logout.bind(this)}
+            getTweets={this.getTweets.bind(this)}
             user={this.state.user}
             user_id={this.state.user_id}
             users={this.state.users}

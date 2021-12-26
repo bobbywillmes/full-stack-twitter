@@ -3,18 +3,6 @@ import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Header = (props) => {
-  const SignOut = () => {
-    if (props.authenticated) {
-      return (
-        <form id="logOut" name="logOut">
-          <button name="logOut" className="btn btn-secondary">Log Out</button>
-        </form>
-      )
-    }
-    return (
-      ''
-    )
-  }
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
@@ -28,7 +16,9 @@ const Header = (props) => {
               <Link className="nav-link active" aria-current="page" to="/">Home</Link>
             </li> */}
           </ul>
-          <SignOut />
+          <form id="logOut" name="logOut">
+            <button name="logOut" className="btn btn-secondary" onClick={props.logout}>Log Out</button>
+          </form>
         </div>
       </div>
     </nav>

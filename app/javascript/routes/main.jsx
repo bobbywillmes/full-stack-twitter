@@ -129,10 +129,19 @@ class User extends React.Component {
     this.props.handleSubmit(event)
   }
 
+  logout = (event) => {
+    event.preventDefault()
+    this.props.logout()
+  }
+
+  componentDidMount() {
+    this.props.getTweets()
+  }
+
   render() {
     return (
       <div className="container">
-      <Header authenticated={this.props.authenticated} handleSubmit={this.handleSubmit} />
+        <Header authenticated={this.props.authenticated} handleSubmit={this.handleSubmit}  logout={this.logout} />
         <div className="row">
           <div className="col">
             <h3>Welcome {this.props.user.username}</h3>
@@ -146,7 +155,7 @@ class User extends React.Component {
         </div>
         <hr />
         <h4>Feed</h4>
-        <Tweets tweets={this.props.tweets} handleDelete={this.handleDelete} user_id={this.props.user_id} />
+        <Tweets tweets={this.props.tweets} handleDelete={this.handleDelete} user_id={this.props.user.id} />
       </div>
     )
   }
@@ -166,9 +175,12 @@ class Main extends React.Component {
     this.props.handleSubmit(event)
   }
 
-
   isAuthenticated() {
     return !!this.props.authenticated
+  }
+
+  componentDidMount() {
+    this.props.checkAuthenticated()
   }
 
   render() {
@@ -183,6 +195,8 @@ class Main extends React.Component {
             authenticated={this.props.authenticated}
             handleSubmit={this.handleSubmit}
             handleChange={this.handleChange}
+            logout={this.props.logout}
+            getTweets={this.props.getTweets}
           />
           : <Guest
             handleSubmit={this.handleSubmit}
