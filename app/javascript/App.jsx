@@ -9,7 +9,6 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 library.add(fas, fab)
 import Main from './routes/main'
 import Profile from './routes/profile'
-import Header from './components/header'
 import HandleErrors from './utils/handleErrors'
 
 class App extends React.Component {

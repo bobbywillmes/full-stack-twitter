@@ -28,9 +28,6 @@ nav {
 
 #signUpErrors, #logInErrors {
   margin-top: 20px;
-  div {
-    display: inline-block;
-  }
 }
 
 #tweets {
@@ -44,6 +41,68 @@ nav {
       position: absolute;
       top: 10px;
       right: 20px;
+    }
+  }
+}
+
+#login {
+  .login-modal {
+    width: 50%;
+  }
+  .image {
+    background-image: url(happening.png);
+    height: 100vh;
+    position: relative;
+    .large-icon {
+      color: white;
+      font-size: 300px;
+      position: absolute;
+      top: 30%;
+      left: 20%;
+    }
+  }
+  @media screen and (max-width: 767px) {
+    .image {
+      height: 30vh;
+      .large-icon {
+        font-size: 75px;
+      }
+    }
+  }
+  @media screen and (min-width: 768px) {
+    .react-responsive-modal-modal {
+      width: 40% !important;
+    }
+  }
+  .home-icon-right {
+    font-size: 48px;
+    color: #1d9bf0;
+  }
+  .forms button {
+    border-radius: 100px;
+    padding: 5px 50px;
+  }
+  .blue-bg {
+    background-color: #1d9bf0;
+  }
+  h1, h2 {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
+  }
+  h1 {
+    font-size: 64px;
+  }
+  #legal {
+    font-size: 10px;
+    display: inline-block;
+    max-width: 50%;
+    margin-top: 5px;
+  }
+  nav {
+    text-align: center;
+    .btn-link, span {
+      font-size: 13px;
+      padding: 0 10px 0 0;
     }
   }
 }
