@@ -30,20 +30,6 @@ nav {
   margin-top: 20px;
 }
 
-#tweets {
-  width: 50%;
-  article {
-    position: relative;
-    border: 1px solid black;
-    padding: 1em;
-    margin: 1em;
-    .delete {
-      position: absolute;
-      top: 10px;
-      right: 20px;
-    }
-  }
-}
 
 #login {
   .login-modal {
@@ -103,6 +89,198 @@ nav {
     .btn-link, span {
       font-size: 13px;
       padding: 0 10px 0 0;
+    }
+  }
+}
+.btn-tweet {
+  background-color: #1d9bf0 !important;
+  color: #fff !important;
+  border-radius: 100px !important;
+  float: right;
+}
+.btn-tweet:hover {
+  background-color: #097cc9 !important;
+}
+
+#feed {
+  .blue-btn {
+    background-color: #1d9bf0;
+  }
+  .blue-btn:hover {
+    background-color: #097cc9;
+  }
+  #leftSidebar {
+    position: fixed;
+    .twitterIcon {
+      color: #1d9bf0;
+      padding-left: 20%;
+      font-size: 2em;
+    }
+    .btn-link {
+      font-size: 16px;
+      color: unset;
+      text-decoration: none;
+      margin: 10px 0;
+    }
+    .icon {
+      margin-right: 10px;
+    }
+    button {
+      padding: 5px 50px;
+      display: block;
+    }
+    button:hover {
+      background: #eee;
+    }
+    #moreMenu {
+      position: absolute;
+      top: 0;
+      background: white;
+      border: 1px dotted blue;
+    }
+  }
+  #leftSidebarBottom {
+    background: #fff;
+    position: fixed;
+    bottom: 0;
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 10px;
+    .icon {
+      color: #30b44c;
+      top: 20%;
+      position: relative
+    }
+  }
+  #leftSidebarBottom:hover {
+    background: #eee;
+  }
+  #showMoreUser {
+    position: absolute;
+    top: -50px;
+    background: #fff;
+    box-shadow: 0 0 10px #ccc;
+    padding: 10px;
+    #logOut button {
+      padding: 5px 40px;
+    }
+    #logOut button:hover {
+      background: #ddd;
+    }
+  }
+  .tweets {
+    .tweet {
+      position: relative;
+      border: 1px solid #eee;
+      padding: 1em;
+      .delete {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+      }
+      .red {
+        color: red !important
+      }
+      .user {
+        text-decoration: none;
+        font-weight: bold;
+      }
+      button {
+        padding: 10px;
+        display: block;
+        color: #eee;
+      }
+      .optionsBtn {
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: #888;
+        button {
+          display: block;
+        }
+      }
+      .options {
+        position: absolute;
+        z-index: 1000;
+        top: 0;
+        right: 0;
+        width: 50%;
+        background: white;
+        border: 1px solid black;
+        box-shadow: 0 0 10px #ccc;
+      }
+      .options .btn {
+        color: #7a7a7a;
+        width: 100%;
+        text-align: unset;
+      }
+      .options .btn:hover {
+        background: #eee;
+      }
+    }
+    .tweet:hover {
+      background: #eee;
+    }
+  }
+  #rightSidebar {
+    position: sticky;
+    top: 10px;
+    section {
+      background: #fcfcfc;
+      margin: 10px 0;
+    }
+    .input-group {
+      background: #f7f9f9 !important;
+      input {
+        background: unset;
+      }
+    }
+    .input-group-text {
+      background: unset;
+    }
+    .focus {
+      background: #fff !important;
+      span, input {
+        background: #fff !important;
+      }
+    }
+    .tweets {
+      font-size: 14px;
+      background: #fcfcfc;
+      .tweet {
+        margin: unset;
+      }
+    }
+    #follow {
+      article {
+        height: 80px;
+        padding: 20px 10px;
+        span {
+          font-weight: bold;
+        }
+        .icon {
+          font-size: 32px;
+          margin-right: 5px;
+        }
+      }
+      article:hover {
+        background: #eee;
+      }
+      .btn {
+        background: #000;
+        color: white;
+        float: right;
+        border-radius: 20px;
+      }
+    }
+  #searchResults {
+      position: absolute;
+      top: 50px;
+      z-index: 100;
+      padding: 20px;
+      border-radius: 10px;
+      background: #f7f9f9;
+      box-shadow: 0 0 10px #ccc;
     }
   }
 }

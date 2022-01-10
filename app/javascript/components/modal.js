@@ -23,7 +23,9 @@ class ResponsiveModal extends React.Component {
     return (
       <div>
         <button className={this.props.buttonClass} onClick={this.onOpenModal}>{this.props.buttonText}</button>
-        <Modal open={open} onClose={this.onCloseModal} className="login-modal">
+        <Modal open={open} onClose={this.onCloseModal} classNames={{
+          modal: this.props.modalClass
+        }}>
           {this.props.children}
         </Modal>
       </div>

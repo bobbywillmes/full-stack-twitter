@@ -6,7 +6,8 @@ import axios from 'axios'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { fab } from '@fortawesome/free-brands-svg-icons'
-library.add(fas, fab)
+import { far } from '@fortawesome/free-regular-svg-icons'
+library.add(fas, fab, far)
 import Main from './routes/main'
 import Profile from './routes/profile'
 import HandleErrors from './utils/handleErrors'
@@ -79,6 +80,7 @@ class App extends React.Component {
       .catch(err => {
         console.log(`error with GET: /api/tweets`)
         console.log(err)
+        this.setState({ userTweets: [] })
       })
   }
 
@@ -125,6 +127,7 @@ class App extends React.Component {
     // api calls to the backend
     event.preventDefault()
     // console.log(event)
+    // console.log(event.target)
     let formType = event.target.name
     // console.log(`form type: ${formType}`)
 
@@ -208,6 +211,10 @@ class App extends React.Component {
           tweetForm.value = ''
           this.setState({ newTweet: '' })
           this.getTweets()
+          if(event.target.getAttribute('id') == 'tweetModal') {
+            // console.log(`should close the tweet modal`)
+            event.target.parentElement.parentElement.click()
+          }
         })
         .catch(err => {
           console.log(`error with POST: /api/tweets`)
@@ -216,7 +223,7 @@ class App extends React.Component {
     } else if (formType === 'deleteTweet') {
       // delete a tweet
       console.log(`formType === 'deleteTweet'`)
-      let tweetEl = event.target.parentElement.parentElement.parentElement
+      let tweetEl = event.target.parentElement.parentElement
       let tweetId = tweetEl.getAttribute('id')
       axios.delete(`/api/tweets/${tweetId}`)
         .then(res => {
