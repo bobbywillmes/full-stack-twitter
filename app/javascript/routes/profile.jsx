@@ -3,7 +3,6 @@ import { useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import FormatDate from '../utils/formatdate'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import Header from '../components/header'
 
 const Tweets = (props) => {
   console.log(props)
@@ -43,7 +42,6 @@ const Profile = (props) => {
 
     return (
       <div className="container">
-        <Header authenticated={props.authenticated} handleSubmit={props.handleSubmit} />
         <h1>{username}</h1>
         <Tweets
           userTweets={props.userTweets}
