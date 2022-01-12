@@ -6,12 +6,6 @@ body {
   text-align: center;
 }
 
-nav {
-  a {
-    padding: 10px
-  }
-}
-
 .d-none {
   display: none;
 }
@@ -121,6 +115,13 @@ nav {
       color: unset;
       text-decoration: none;
       margin: 10px 0;
+    }
+    .btn-fake {
+      color: #888;
+    }
+    .btn-link a {
+      color: unset;
+      text-decoration: unset;
     }
     .icon {
       margin-right: 10px;
@@ -281,6 +282,15 @@ nav {
       border-radius: 10px;
       background: #f7f9f9;
       box-shadow: 0 0 10px #ccc;
+    }
+  }
+}
+
+#profile {
+  @extend #feed;
+  .col-6 {
+    .username {
+      margin: 10px 0
     }
   }
 }

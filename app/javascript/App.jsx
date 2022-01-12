@@ -11,6 +11,7 @@ library.add(fas, fab, far)
 import Main from './routes/main'
 import Profile from './routes/profile'
 import HandleErrors from './utils/handleErrors'
+import ScrollToTop from './utils/scrollToTop'
 
 class App extends React.Component {
   // top level component for application, maintains the State, passes down handleChange (form changes), handleSubmit (api calls) & state data (tweets & users) to Main component
@@ -40,6 +41,7 @@ class App extends React.Component {
       .then(res => {
         if (res.status === 200) {
           this.setState({ tweets: res.data })
+          // console.log(res.data)
         } else {
           console.log(`couldn't get tweets`)
         }
@@ -67,11 +69,19 @@ class App extends React.Component {
   }
 
   getUserTweets(username) {
-    console.log(`getUserTweets(${username})   app.js`)
+    // console.log(`getUserTweets(${username})   app.js`)
+    const sortByDate = (a, b) => {
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    }
     axios.get('/api/users/' + username + '/tweets')
       .then(res => {
         if (res.status === 200) {
           // console.log(res.data.tweets)
+          let tweets = res.data.tweets
+          tweets.sort(sortByDate)
+          tweets.forEach(tweet => {
+            tweet.username = username
+          })
           this.setState({ userTweets: res.data.tweets })
         } else {
           console.log(`couldn't get tweets`)
@@ -265,6 +275,7 @@ class App extends React.Component {
   render() {
     return (
       <Router>
+        <ScrollToTop />
         <Routes>
           <Route exact path='/' element={<Main
             handleChange={this.handleChange}
@@ -279,12 +290,15 @@ class App extends React.Component {
             tweets={this.state.tweets}
           />}  ></Route>
           <Route exact path="/:username" element={<Profile
+            handleChange={this.handleChange}
+            handleSubmit={this.handleSubmit}
             getUserTweets={this.getUserTweets}
             userTweets={this.state.userTweets}
             setProfileUser={this.setProfileUser.bind(this)}
             user={this.state.user}
             handleSubmit={this.handleSubmit}
             authenticated={this.state.authenticated}
+            logout={this.logout.bind(this)}
           />}></Route>
         </Routes>
       </Router>

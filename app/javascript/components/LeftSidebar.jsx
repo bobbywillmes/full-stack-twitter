@@ -36,58 +36,58 @@ class LeftSidebar extends React.Component {
           <div>
             <Link to={"/"} className="twitterIcon"><FontAwesomeIcon icon={['fab', 'twitter']}></FontAwesomeIcon></Link>
             <button className="btn btn-link">
-              <FontAwesomeIcon icon={['fas', 'home']} className="icon"></FontAwesomeIcon> Home
+              <Link to={"/"}><FontAwesomeIcon icon={['fas', 'home']} className="icon"></FontAwesomeIcon> Home</Link>
             </button>
-            <button className="btn btn-link">
+            <button className="btn btn-link btn-fake">
               <FontAwesomeIcon icon={['fas', 'hashtag']} className="icon"></FontAwesomeIcon> Explore
             </button>
-            <button className="btn btn-link">
+            <button className="btn btn-link btn-fake">
               <FontAwesomeIcon icon={['far', 'bell']} className="icon"></FontAwesomeIcon> Notifications
             </button>
-            <button className="btn btn-link">
+            <button className="btn btn-link btn-fake">
               <FontAwesomeIcon icon={['far', 'envelope']} className="icon"></FontAwesomeIcon> Messages
             </button>
-            <button className="btn btn-link">
+            <button className="btn btn-link btn-fake">
               <FontAwesomeIcon icon={['far', 'user']} className="icon"></FontAwesomeIcon> Profile
             </button>
-            <button className="btn btn-link" onFocus={this.showMoreNavFunc} onBlur={this.showMoreNavFunc}>
+            <button className="btn btn-link btn-fake" onFocus={this.showMoreNavFunc} onBlur={this.showMoreNavFunc}>
               <FontAwesomeIcon icon={['fas', 'ellipsis-h']} className="icon"></FontAwesomeIcon> More
             </button>
           </div>
           {this.state.showMoreNav ?
             (<div id="moreMenu">
-              <button className="btn btn-link">
+              <button className="btn btn-link btn-fake">
                 <FontAwesomeIcon icon={['fas', 'comment-dots']} className="icon"></FontAwesomeIcon> Topics
               </button>
-              <button className="btn btn-link">
+              <button className="btn btn-link btn-fake">
                 <FontAwesomeIcon icon={['fas', 'bolt']} className="icon"></FontAwesomeIcon> Moments
               </button>
-              <button className="btn btn-link">
+              <button className="btn btn-link btn-fake">
                 <FontAwesomeIcon icon={['fab', 'twitter']} color="#1d9bf0" className="icon"></FontAwesomeIcon> Twitter Blue
               </button>
-              <button className="btn btn-link">
+              <button className="btn btn-link btn-fake">
                 <FontAwesomeIcon icon={['far', 'newspaper']} className="icon"></FontAwesomeIcon> Newsletters
               </button>
-              <button className="btn btn-link">
+              <button className="btn btn-link btn-fake">
                 <FontAwesomeIcon icon={['fas', 'rocket']} className="icon"></FontAwesomeIcon> Twitter for Professionals
               </button>
-              <button className="btn btn-link">
+              <button className="btn btn-link btn-fake">
                 <FontAwesomeIcon icon={['fas', 'arrow-right']} className="icon"></FontAwesomeIcon> Twitter ads
               </button>
-              <button className="btn btn-link">
+              <button className="btn btn-link btn-fake">
                 <FontAwesomeIcon icon={['far', 'chart-bar']} className="icon"></FontAwesomeIcon> Analytics
               </button>
               <hr />
-              <button className="btn btn-link">
+              <button className="btn btn-link btn-fake">
                 <FontAwesomeIcon icon={['fas', 'cog']} className="icon"></FontAwesomeIcon> Setting and privacy
               </button>
-              <button className="btn btn-link">
+              <button className="btn btn-link btn-fake">
                 <FontAwesomeIcon icon={['far', 'question-circle']} className="icon"></FontAwesomeIcon> Help Center
               </button>
-              <button className="btn btn-link">
+              <button className="btn btn-link btn-fake">
                 <FontAwesomeIcon icon={['far', 'edit']} className="icon"></FontAwesomeIcon> Display
               </button>
-              <button className="btn btn-link">
+              <button className="btn btn-link btn-fake">
                 <FontAwesomeIcon icon={['far', 'user-circle']} className="icon"></FontAwesomeIcon> Keyboard shortcuts
               </button>
 

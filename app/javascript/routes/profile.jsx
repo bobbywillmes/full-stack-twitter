@@ -1,36 +1,9 @@
 import * as React from 'react'
 import { useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import FormatDate from '../utils/formatdate'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
-const Tweets = (props) => {
-  console.log(props)
-  return (
-    <div id="tweets">
-      <h3>Tweets</h3>
-      {/* map through tweets; if user is the author, add a delete button */}
-      {props.userTweets.map(tweet => {
-        let del = ''
-        if (props.username === props.user.username) {
-          del = (
-            <span name="deleteTweet" className="delete" onClick={props.handleSubmit}>
-                <FontAwesomeIcon icon={['fas', 'trash']}></FontAwesomeIcon>
-            </span>
-          )
-        }
-        return (
-          <article id={tweet.id} key={tweet.id}>
-            {tweet.message} <br />
-            by {props.username} <br />
-            on {FormatDate(tweet.created_at)}
-            {del}
-          </article>
-        )
-      })}
-    </div>
-  )
-}
+import LeftSidebar from '../components/LeftSidebar'
+import RightSidebar from '../components/RightSidebar'
+import Tweets from '../components/Tweets'
 
 const Profile = (props) => {
   let params = useParams()
@@ -39,16 +12,35 @@ const Profile = (props) => {
   useEffect(() => {
     props.setProfileUser(params.username)
   }, [])
+  const handleChange = (event) => {
+    props.handleChange(event)
+  }
+  const handleSubmit = (event) => {
+    props.handleSubmit(event)
+  }
+  const handleDelete = (event) => {
+    props.handleSubmit(event)
+  }
+  const logout = (event) => {
+    event.preventDefault()
+    props.logout(event)
+  }
 
     return (
-      <div className="container">
-        <h1>{username}</h1>
-        <Tweets
-          userTweets={props.userTweets}
-          username={username}
-          user={props.user}
-        />
-        
+      <div id="profile" className="container">
+        <div className="row">
+          <div className="col-3">
+            <LeftSidebar user={props.user} handleChange={handleChange} handleSubmit={handleSubmit} logout={logout} />
+          </div>
+          <div className="col-6">
+            <h4 className="username">{username}</h4>
+            <Tweets tweets={props.userTweets} handleDelete={handleDelete} user_id={props.user.id} />
+          </div>
+          <div className="col-3">
+            <RightSidebar />
+          </div>
+        </div>
+        <hr />
       </div>
     )
 }
