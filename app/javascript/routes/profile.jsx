@@ -14,6 +14,17 @@ const Profile = (props) => {
   }, [])
   const handleChange = (event) => {
     props.handleChange(event)
+    let form = event.target.parentElement.parentElement.parentElement
+    let button = form.querySelector('button')
+    let textarea = form.querySelector('textarea')
+    if (textarea.value.length > 0) {
+      button.disabled = false
+    } else {
+      button.disabled = true
+    }
+  }
+  const handleImageSelect = (event) => {
+    props.handleImageSelect(event)
   }
   const handleSubmit = (event) => {
     props.handleSubmit(event)
@@ -30,7 +41,7 @@ const Profile = (props) => {
       <div id="profile" className="container">
         <div className="row">
           <div className="col-3">
-            <LeftSidebar user={props.user} handleChange={handleChange} handleSubmit={handleSubmit} logout={logout} />
+            <LeftSidebar user={props.user} handleChange={handleChange} handleSubmit={handleSubmit} handleImageSelect={handleImageSelect} logout={logout} />
           </div>
           <div className="col-6">
             <h4 className="username">{username}</h4>

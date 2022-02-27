@@ -132,6 +132,10 @@ class User extends React.Component {
   handleSubmit = (event) => {
     this.props.handleSubmit(event)
   }
+  handleImageSelect = (event) => {
+    console.log(`handleImageSelect  -- User - Main.jsx`)
+    this.props.handleImageSelect(event)
+  }
   handleDelete = (event) => {
     this.props.handleSubmit(event)
   }
@@ -149,11 +153,11 @@ class User extends React.Component {
       <div id="feed" className="container">
         <div className="row">
           <div className="col-3">
-            <LeftSidebar user={this.props.user} handleChange={this.handleChange} handleSubmit={this.handleSubmit} logout={this.logout} />
+            <LeftSidebar user={this.props.user} handleChange={this.handleChange} handleSubmit={this.handleSubmit} logout={this.logout} handleImageSelect={this.handleImageSelect} />
           </div>
           <div className="col-6">
             <h4>Home</h4>
-            <TweetForm handleChange={this.handleChange} handleSubmit={this.handleSubmit} />
+            <TweetForm handleChange={this.handleChange} handleSubmit={this.handleSubmit} handleImageSelect={this.handleImageSelect} />
             <Tweets tweets={this.props.tweets} handleDelete={this.handleDelete} user_id={this.props.user.id} />
           </div>
           <div className="col-3">
@@ -181,6 +185,10 @@ class Main extends React.Component {
   isAuthenticated() {
     return !!this.props.authenticated
   }
+  handleImageSelect = (event) => {
+    console.log(`handleImageSelect() - Main - Main.jsx`)
+    this.props.handleImageSelect(event)
+  }
 
   componentDidMount() {
     this.props.checkAuthenticated()
@@ -200,6 +208,7 @@ class Main extends React.Component {
             handleChange={this.handleChange}
             logout={this.props.logout}
             getTweets={this.props.getTweets}
+            handleImageSelect={this.handleImageSelect}
           />
           : <Guest
             handleSubmit={this.handleSubmit}

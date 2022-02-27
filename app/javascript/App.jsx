@@ -29,6 +29,7 @@ class App extends React.Component {
       newEmail: '',
       newPassword: '',
       newTweet: '',
+      newTweetImage: null,
       tweets: [],
       users: [],
       userTweets: [],
@@ -37,6 +38,7 @@ class App extends React.Component {
   }
 
   getTweets() {
+    // console.log(`getTweets()   app.js`)
     axios.get('/api/tweets')
       .then(res => {
         if (res.status === 200) {
@@ -70,19 +72,11 @@ class App extends React.Component {
 
   getUserTweets(username) {
     // console.log(`getUserTweets(${username})   app.js`)
-    const sortByDate = (a, b) => {
-      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    }
     axios.get('/api/users/' + username + '/tweets')
       .then(res => {
         if (res.status === 200) {
-          // console.log(res.data.tweets)
-          let tweets = res.data.tweets
-          tweets.sort(sortByDate)
-          tweets.forEach(tweet => {
-            tweet.username = username
-          })
-          this.setState({ userTweets: res.data.tweets })
+          // console.log(res.data)
+          this.setState({ userTweets: res.data })
         } else {
           console.log(`couldn't get tweets`)
         }
@@ -209,9 +203,22 @@ class App extends React.Component {
         })
     } else if (formType === 'tweet') {
       // submit a tweet, else return error
-      axios.post('/api/tweets', {
-        tweet: {
-          message: this.state.newTweet
+      // axios.post('/api/tweets', {
+      //   tweet: {
+      //     message: this.state.newTweet
+      //   }
+      // })
+      let formData = new FormData()
+      formData.append('tweet[message]', this.state.newTweet)
+      if (this.state.newTweetImage !== null) {
+        formData.append('tweet[image]', this.state.newTweetImage)
+      }
+      axios({
+        method: 'post',
+        url: '/api/tweets',
+        data: formData,
+        config: {
+          headers: { 'Content-Type': false }
         }
       })
         .then(res => {
@@ -219,9 +226,12 @@ class App extends React.Component {
           // clear tweet form, then get tweets
           const tweetForm = document.querySelector('textarea#tweet')
           tweetForm.value = ''
+          const tweetFormImage = document.querySelector('input#image')
+          tweetFormImage.value = ''
           this.setState({ newTweet: '' })
+          this.setState({ newTweetImage: null })
           this.getTweets()
-          if(event.target.getAttribute('id') == 'tweetModal') {
+          if (event.target.getAttribute('id') == 'tweetModal') {
             // console.log(`should close the tweet modal`)
             event.target.parentElement.parentElement.click()
           }
@@ -272,6 +282,12 @@ class App extends React.Component {
     }
   }
 
+  handleImageSelect = (event) => {
+    // console.log(`handleImageSelect  --- App.jsx`)
+    // console.log(event.target.files)
+    this.setState({ newTweetImage: event.target.files[0] })
+  }
+
   render() {
     return (
       <Router>
@@ -279,6 +295,7 @@ class App extends React.Component {
         <Routes>
           <Route exact path='/' element={<Main
             handleChange={this.handleChange}
+            handleImageSelect={this.handleImageSelect}
             handleSubmit={this.handleSubmit}
             authenticated={this.state.authenticated}
             checkAuthenticated={this.checkAuthenticated.bind(this)}
@@ -291,6 +308,7 @@ class App extends React.Component {
           />}  ></Route>
           <Route exact path="/:username" element={<Profile
             handleChange={this.handleChange}
+            handleImageSelect={this.handleImageSelect}
             handleSubmit={this.handleSubmit}
             getUserTweets={this.getUserTweets}
             userTweets={this.state.userTweets}

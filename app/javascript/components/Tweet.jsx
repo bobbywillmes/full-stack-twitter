@@ -42,6 +42,18 @@ class Tweet extends React.Component {
     )
   }
 
+  image = () => {
+    let image
+    if(this.props.tweet.image) {
+      image = <img src={this.props.tweet.image.url} alt="Image" />
+    }
+    return (
+      <Fragment>
+        {image}
+      </Fragment>
+    )
+  }
+
   render() {
     return (
       <article id={this.props.tweet.id} key={this.props.tweet.id} className="tweet">
@@ -50,6 +62,7 @@ class Tweet extends React.Component {
         </Link> &bull;  {FormatDate(this.props.tweet.created_at, true)}
         <br />
         {this.props.tweet.message} <br />
+        <this.image />
       {this.state.hasOptions ? <this.tweetOptions /> : (<span></span>)}
       </article>
     )

@@ -15,6 +15,9 @@ class LeftSidebar extends React.Component {
   handleChange = (event) => {
     this.props.handleChange(event)
   }
+  handleImageSelect = (event) => {
+    this.props.handleImageSelect(event)
+  }
   handleSubmit = (event) => {
     this.props.handleSubmit(event)
   }
@@ -102,7 +105,7 @@ class LeftSidebar extends React.Component {
             buttonClass="btn btn-rounded btn-tweet"
             modalClass="tweetModal modal-lg col-9 col-md-6"
           >
-            <TweetForm formId="tweetModal" handleChange={this.handleChange} handleSubmit={this.handleSubmit} />
+            <TweetForm formId="tweetModal" handleChange={this.handleChange} handleSubmit={this.handleSubmit} handleImageSelect={this.handleImageSelect} />
           </Modal>
         </nav>
         <div id="leftSidebarBottom" onClick={this.showMoreUserFunc}>

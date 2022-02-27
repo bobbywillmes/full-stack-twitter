@@ -1,7 +1,7 @@
 class TweetsController < ApplicationController
   def index
     @tweets = Tweet.all.order(created_at: :desc)
-    render 'api/tweets/index'
+    render json: @tweets
   end
 
   def create
@@ -48,16 +48,14 @@ class TweetsController < ApplicationController
     user = User.find_by(username: params[:username])
 
     if user
-      @tweets = user.tweets
-      render json: {
-        tweets: @tweets
-      }
+      @tweets = user.tweets.order(created_at: :desc)
+      render json: @tweets
     end
   end
 
   private
 
     def tweet_params
-      params.require(:tweet).permit(:message)
+      params.require(:tweet).permit(:message, :image)
     end
 end
